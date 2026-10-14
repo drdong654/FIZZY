@@ -1,0 +1,22 @@
+[project]
+name = "fizzy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "drdong654", email = "vanjdamanj@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "aiogram>=3.31.0",
+    "asyncpg>=0.32.0",
+    "dotenv>=0.9.9",
+    "sqlalchemy>=2.1.4",
+]
+
+[project.scripts]
+fizzy = "fizzy:main"
+
+[build-system]
+requires = ["uv_build>=0.12.21,<0.13.0"]
+build-backend = "uv_build"
