@@ -1,12 +1,10 @@
 import asyncio
 import os
+
 from dotenv import load_dotenv
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
-
-Session = sessionmaker(bind=engine)
-session = Session()
 
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
