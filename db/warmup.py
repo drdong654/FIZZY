@@ -14,4 +14,7 @@ def find_mentions(messages, keyword):
         
     return [message for message in messages if keyword.lower() in message.lower()]
 
-print(find_mentions(messages, keyword))
+found = find_mentions(messages, keyword)
+print(found)
+print(len(found))
+print(find_mentions(messages, "AI"))

@@ -1,8 +1,7 @@
-import asyncio
 import os
 
 from dotenv import load_dotenv
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 load_dotenv()
 
@@ -15,5 +14,3 @@ engine = create_async_engine(url=database_url)
 # Создаем фабрику сессий для взаимодействия с базой данных
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
-async with AsyncSessionLocal() as session:
-    pass
