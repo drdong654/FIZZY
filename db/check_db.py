@@ -3,7 +3,58 @@ import asyncio
 from sqlalchemy import select
 
 from db.database import async_session_maker, engine
-from db.models import Event, Mention, RawMessage, Source
+from db.models import Event, Mention, Persona, RawMessage, Source
+
+
+async def get_or_create(session, model, **fields):
+    obj = await session.scalar(select(model).filter_by(**fields))
+    if obj is None:
+        obj = model(**fields)
+        session.add(obj)
+        await session.flush()
+    return obj
+
+
+async def save_posts(posts):
+    """Сохраняем посты с persona_key, персонами."""
+    async with async_session_maker() as session:
+        event = await get_or_create(session, Event, name="TechHeads 2026")
+        source = await get_or_create(
+            session, Source, kind="synthetic", title="Danish Personas"
+        )
+
+        for post in posts:
+            exists = await session.scalar(
+                select(RawMessage.id).where(
+                    RawMessage.source_id == source.id,
+                    RawMessage.external_id == str(post["persona_key"]),
+                )
+            )
+            if exists is not None:
+                continue
+
+            persona = Persona(**post["persona"])
+            session.add(persona)
+            await session.flush()
+
+            message = RawMessage(
+                source_id=source.id,
+                external_id=str(post["persona_key"]),
+                text=post["text"],
+            )
+            session.add(message)
+            await session.flush()
+
+            session.add(
+                Mention(
+                    raw_message_id=message.id,
+                    event_id=event.id,
+                    persona_id=persona.id,
+                    is_synthetic=True,
+                )
+            )
+
+        await session.commit()
 
 
 async def main():

@@ -58,13 +58,18 @@ uv sync
 cp .env.example .env
 ```
 
-Укажи в `.env` свои значения `BOT_TOKEN` и `DATABASE_URL`, затем запусти бота:
+Укажи в `.env` свои значения `BOT_TOKEN` и `DATABASE_URL`. Создай таблицы и проверь подключение:
+
+```bash
+.venv/bin/python -m db.init_db
+.venv/bin/python -m db.check_db
+```
+
+Затем запусти бота:
 
 ```bash
 python -m bot.main
 ```
-
-> Подключение и настройка базы данных ещё находятся в разработке.
 
 ## Стек
 
